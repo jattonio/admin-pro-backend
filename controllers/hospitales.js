@@ -48,19 +48,80 @@ const crearHospital = async (req, res = response) => {
 
 const actualizarHospital = async (req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'actualizarHospital'
-    });
+    const id = req.params.id;
+    const usuario = req.uid;
+
+    try {
+
+        // Validar si usuario a actualizar existe
+        const hospitalDB = await Hospital.findById( id );
+
+        if ( !hospitalDB ) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital no existe.'
+            });
+        }
+
+        const cambiosHospital = {
+            ...req.body,
+            usuario: uid
+        }
+
+        // Actualizar Usuario
+        const hospitalActualizado = await Hospital.findByIdAndUpdate( id, cambiosHospital, { new: true } );
+
+        res.json({
+            ok: true,
+            hospitalActualizado
+        });
+
+    } catch (error) {
+        console.log( error );
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado'
+        });
+        
+    }
 
 }
 
 const borrarHospital = async (req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'borrarHospital'
-    });
+    id = req.params.id;
+
+    try {
+
+        // Validar si hospital a borrar existe
+        const hospitalDB = await Hospital.findById( id );
+
+        if ( !hospitalDB ) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital no existe.'
+            });
+        }
+        
+        // Borrar hospital
+        await Hospital.findByIdAndDelete( id );
+
+        console.log('Borrar hospital: ' + id);
+        res.status(200).json({
+            ok: true,
+            msg: 'Hospital borrado',
+            id
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error Inesperado - Borrar hospital.'
+        });
+    }
 
 }
 
