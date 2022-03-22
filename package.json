@@ -6,6 +6,9 @@
   "scripts": {
     "start:dev": "nodemon index.js"
   },
+  "stackblitz": {
+    "startCommand": "npm start nodemon index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
